@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:real_estate_app/search/map_marker.dart';
 import 'package:real_estate_app/utils/extensions.dart';
 
 class SearchPage extends StatefulWidget {
@@ -120,7 +121,10 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-
+              Positioned(top: 200, left: 100, child: MapMarker()),
+              Positioned(top: 300, right: 80, child: MapMarker()),
+              Positioned(bottom: 250, left: 150, child: MapMarker()),
+              Positioned(bottom: 200, right: 50, child: MapMarker()),
               Positioned(
                 bottom: 160,
                 left: 20,

@@ -42,12 +42,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   final images = [
-    'assets/images/apt-1.jpg',
-    'assets/images/apt-2.jpg',
-    'assets/images/apt-3.jpg',
-    'assets/images/apt-1.jpg',
-    'assets/images/apt-2.jpg',
-    'assets/images/apt-3.jpg',
+    'assets/images/apt-1.png',
+    'assets/images/apt-2.png',
+    'assets/images/apt-3.png',
+    'assets/images/apt-1.png',
+    'assets/images/apt-2.png',
+    'assets/images/apt-3.png',
   ];
 
   @override
