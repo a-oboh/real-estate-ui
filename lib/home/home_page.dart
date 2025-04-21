@@ -15,6 +15,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _sizeAnimation;
   late Animation<double> _opacityAnimation;
+  late Animation<double> _extendableAnimation;
+
+  final DraggableScrollableController _draggableController =
+      DraggableScrollableController();
 
   @override
   void initState() {
@@ -32,12 +36,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         curve: const Interval(0.5, 1.0, curve: Curves.easeIn),
       ),
     );
+
     _animationController.forward();
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _draggableController.dispose();
     super.dispose();
   }
 
@@ -113,6 +119,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 CountRow(),
                 Expanded(
                   child: DraggableScrollableSheet(
+                    controller: _draggableController,
                     snap: true,
                     initialChildSize: 0.4,
                     minChildSize: 0.4,
@@ -238,7 +245,7 @@ class _CountRowState extends State<CountRow> with TickerProviderStateMixin {
     _controller.forward();
   }
 
-   @override
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
