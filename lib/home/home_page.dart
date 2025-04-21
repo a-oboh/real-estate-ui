@@ -35,6 +35,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     _animationController.forward();
   }
 
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   final images = [
     'assets/images/apt-1.jpg',
     'assets/images/apt-2.jpg',
@@ -230,6 +236,12 @@ class _CountRowState extends State<CountRow> with TickerProviderStateMixin {
       ),
     );
     _controller.forward();
+  }
+
+   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override

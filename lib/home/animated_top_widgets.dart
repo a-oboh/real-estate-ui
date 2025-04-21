@@ -121,6 +121,12 @@ class _AnimatedTitleAvatarState extends State<AnimatedTitleAvatar>
     _controller.forward();
   }
 
+   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(

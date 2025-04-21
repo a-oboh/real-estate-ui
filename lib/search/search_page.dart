@@ -14,7 +14,27 @@ class SearchPage extends StatefulWidget {
   State<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1600),
+    );
+    _scaleAnimation = Tween<double>(begin: 0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+    _animationController.forward();
+  }
+
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
 
@@ -27,92 +47,121 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    _mapController.future.then((controller) {
+      controller.dispose();
+    });
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // Container(decoration: const BoxDecoration(color: Colors.black87)),
-          GoogleMap(
-            onMapCreated: (GoogleMapController controller) {
-              _mapController.complete(controller);
-              _setMapStyle();
-            },
-            initialCameraPosition: CameraPosition(
-              target: LatLng(59.9311, 30.3609),
-              zoom: 14,
-            ),
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 250.convertedWidth(context),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Saint Petersburg',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
+      body: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, _) {
+          return Stack(
+            children: [
+              GoogleMap(
+                onMapCreated: (GoogleMapController controller) {
+                  _mapController.complete(controller);
+                  _setMapStyle();
+                },
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(59.9311, 30.3609),
+                  zoom: 14,
+                ),
+              ),
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Transform.scale(
+                        scale: _scaleAnimation.value,
+                        child: SizedBox(
+                          width: 250.convertedWidth(context),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Saint Petersburg',
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              prefixIcon: const Icon(Icons.search),
+                            ),
+                          ),
                         ),
-                        prefixIcon: const Icon(Icons.search),
+                      ),
+                      Gap(10),
+                      Transform.scale(
+                        scale: _scaleAnimation.value,
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(Icons.filter_list),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              Positioned(
+                bottom: 160,
+                left: 20,
+                child: Transform.scale(
+                  scale: _scaleAnimation.value,
+                  child: _FrostedCircleButton(icon: Icons.wallet),
+                ),
+              ),
+              Positioned(
+                bottom: 100,
+                left: 20,
+                child: Transform.scale(
+                  scale: _scaleAnimation.value,
+                  child: _FrostedCircleButton(icon: Icons.navigation_rounded),
+                ),
+              ),
+              Positioned(
+                bottom: 100,
+                right: 20,
+                child: Transform.scale(
+                  scale: _scaleAnimation.value,
+                  child: FrostedGlass(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Icon(Icons.list_rounded, color: Colors.white),
+                          Gap(10),
+                          Text(
+                            'List of variants',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Gap(10),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(Icons.filter_list),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 160,
-            left: 20,
-            child: _FrostedCircleButton(icon: Icons.wallet),
-          ),
-          Positioned(
-            bottom: 100,
-            left: 20,
-            child: _FrostedCircleButton(icon: Icons.navigation_rounded),
-          ),
-          Positioned(
-            bottom: 100,
-            right: 20,
-            child: FrostedGlass(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.list_rounded, color: Colors.white),
-                    Gap(10),
-                    Text(
-                      'List of variants',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
                 ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
