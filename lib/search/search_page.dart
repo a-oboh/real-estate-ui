@@ -58,115 +58,113 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnimatedBuilder(
-        animation: _animationController,
-        builder: (context, _) {
-          return Stack(
-            children: [
-              GoogleMap(
-                onMapCreated: (GoogleMapController controller) {
-                  _mapController.complete(controller);
-                  _setMapStyle();
-                },
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(59.9311, 30.3609),
-                  zoom: 14,
-                ),
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, _) {
+        return Stack(
+          children: [
+            GoogleMap(
+              onMapCreated: (GoogleMapController controller) {
+                _mapController.complete(controller);
+                _setMapStyle();
+              },
+              initialCameraPosition: CameraPosition(
+                target: LatLng(59.9311, 30.3609),
+                zoom: 14,
               ),
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Transform.scale(
-                        scale: _scaleAnimation.value,
-                        child: SizedBox(
-                          width: 250.convertedWidth(context),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Saint Petersburg',
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
-                              ),
-                              prefixIcon: const Icon(Icons.search),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Transform.scale(
+                      scale: _scaleAnimation.value,
+                      child: SizedBox(
+                        width: 250.convertedWidth(context),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Saint Petersburg',
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide.none,
                             ),
+                            prefixIcon: const Icon(Icons.search),
                           ),
                         ),
                       ),
-                      Gap(10),
-                      Transform.scale(
-                        scale: _scaleAnimation.value,
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(30),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(Icons.filter_list),
+                    ),
+                    Gap(10),
+                    Transform.scale(
+                      scale: _scaleAnimation.value,
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
+                        child: const Icon(Icons.filter_list),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              Positioned(top: 200, left: 100, child: MapMarker()),
-              Positioned(top: 300, right: 80, child: MapMarker()),
-              Positioned(bottom: 250, left: 150, child: MapMarker()),
-              Positioned(bottom: 200, right: 50, child: MapMarker()),
-              Positioned(
-                bottom: 160,
-                left: 20,
-                child: Transform.scale(
-                  scale: _scaleAnimation.value,
-                  child: _FrostedCircleButton(icon: Icons.wallet),
-                ),
+            ),
+            Positioned(top: 200, left: 100, child: MapMarker()),
+            Positioned(top: 300, right: 80, child: MapMarker()),
+            Positioned(bottom: 250, left: 150, child: MapMarker()),
+            Positioned(bottom: 200, right: 50, child: MapMarker()),
+            Positioned(
+              bottom: 160,
+              left: 20,
+              child: Transform.scale(
+                scale: _scaleAnimation.value,
+                child: _FrostedCircleButton(icon: Icons.wallet),
               ),
-              Positioned(
-                bottom: 100,
-                left: 20,
-                child: Transform.scale(
-                  scale: _scaleAnimation.value,
-                  child: _FrostedCircleButton(icon: Icons.navigation_rounded),
-                ),
+            ),
+            Positioned(
+              bottom: 100,
+              left: 20,
+              child: Transform.scale(
+                scale: _scaleAnimation.value,
+                child: _FrostedCircleButton(icon: Icons.navigation_rounded),
               ),
-              Positioned(
-                bottom: 100,
-                right: 20,
-                child: Transform.scale(
-                  scale: _scaleAnimation.value,
-                  child: FrostedGlass(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Icon(Icons.list_rounded, color: Colors.white),
-                          Gap(10),
-                          Text(
-                            'List of variants',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
+            ),
+            Positioned(
+              bottom: 100,
+              right: 20,
+              child: Transform.scale(
+                scale: _scaleAnimation.value,
+                child: FrostedGlass(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.list_rounded, color: Colors.white),
+                        Gap(10),
+                        Text(
+                          'List of variants',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

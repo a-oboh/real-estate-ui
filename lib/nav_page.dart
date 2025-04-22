@@ -11,7 +11,10 @@ class NavPage extends StatefulWidget {
   State<NavPage> createState() => _NavPageState();
 }
 
-class _NavPageState extends State<NavPage> {
+class _NavPageState extends State<NavPage> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<Offset> _offsetAnimation;
+
   List<Widget> pages = [
     const SearchPage(),
     const MyHomePage(),
@@ -19,17 +22,53 @@ class _NavPageState extends State<NavPage> {
     const MyHomePage(),
     const MyHomePage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _offsetAnimation = Tween<Offset>(
+      begin: const Offset(0, 1), // Start off-screen (below)
+      end: Offset.zero, // End at normal position
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+    );
+
+    _animationController.forward(); // Start the animation
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final bottomBarInheritedW = BottomBarInheritedW.of(context);
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            pages[bottomBarInheritedW?.currentIndex ?? 2],
-            CustomBottomNavBar(),
-          ],
-        ),
+      body: Stack(
+        children: [
+          pages[bottomBarInheritedW?.currentIndex ?? 2],
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: SlideTransition(
+              position: _offsetAnimation,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 14),
+                child: Container(
+                  width: double.infinity,
+                  child: CustomBottomNavBar(),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -58,124 +58,121 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.white,
-                Colors.grey[300]!,
-                AppColors.darkGoldTint.withOpacity(0.5),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              transform: GradientRotation(-0.7),
-            ),
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.white,
+              Colors.grey[300]!,
+              AppColors.darkGoldTint.withOpacity(0.5),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            transform: GradientRotation(-0.7),
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TopRow(),
-                Gap(30),
-                AnimatedBuilder(
-                  animation: _animationController,
-                  builder: (context, child) {
-                    return Transform.translate(
-                      offset: Offset(0, 50 * (1 - _sizeAnimation.value)),
-                      child: Opacity(
-                        opacity: _opacityAnimation.value,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Hi, Marina',
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8, right: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TopRow(),
+              Gap(30),
+              AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(0, 50 * (1 - _sizeAnimation.value)),
+                    child: Opacity(
+                      opacity: _opacityAnimation.value,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hi, Marina',
+                            style: TextStyle(
+                              color: AppColors.darkGoldTint,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 300,
+                            child: Text(
+                              'let\'s select your perfect place',
                               style: TextStyle(
-                                color: AppColors.darkGoldTint,
-                                fontSize: 20,
+                                fontSize: 30,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            SizedBox(
-                              width: 300,
-                              child: Text(
-                                'let\'s select your perfect place',
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+              Gap(20),
+              CountRow(),
+              Expanded(
+                child: DraggableScrollableSheet(
+                  controller: _draggableController,
+                  snap: true,
+                  initialChildSize: 0.4,
+                  minChildSize: 0.4,
+                  maxChildSize: 1,
+                  builder: (
+                    BuildContext context,
+                    ScrollController scrollController,
+                  ) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
                         ),
+                      ),
+                      child: ListView.builder(
+                        controller: scrollController,
+                        itemCount: 3,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (index == 0) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: PropertyContainer(
+                                imagePath: images[index],
+                              ),
+                            );
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              left: 8,
+                              right: 8,
+                              bottom: 8,
+                            ),
+                            child: Row(
+                              children: [
+                                PropertyContainer(
+                                  imagePath: images[index],
+                                  width: 165.convertedWidth(context),
+                                ),
+                                Spacer(),
+                                PropertyContainer(
+                                  imagePath: images[index + 1],
+                                  width: 165.convertedWidth(context),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                     );
                   },
                 ),
-                Gap(20),
-                CountRow(),
-                Expanded(
-                  child: DraggableScrollableSheet(
-                    controller: _draggableController,
-                    snap: true,
-                    initialChildSize: 0.4,
-                    minChildSize: 0.4,
-                    maxChildSize: 1,
-                    builder: (
-                      BuildContext context,
-                      ScrollController scrollController,
-                    ) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          ),
-                        ),
-                        child: ListView.builder(
-                          controller: scrollController,
-                          itemCount: 3,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (index == 0) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: PropertyContainer(
-                                  imagePath: images[index],
-                                ),
-                              );
-                            }
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                left: 8,
-                                right: 8,
-                                bottom: 8,
-                              ),
-                              child: Row(
-                                children: [
-                                  PropertyContainer(
-                                    imagePath: images[index],
-                                    width: 165.convertedWidth(context),
-                                  ),
-                                  Spacer(),
-                                  PropertyContainer(
-                                    imagePath: images[index + 1],
-                                    width: 165.convertedWidth(context),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
